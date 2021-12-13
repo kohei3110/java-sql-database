@@ -21,7 +21,12 @@
     <lombok.version>1.18.12</lombok.version>  
     <mockito-core.version>2.23.0</mockito-core.version> 
   </properties>  
-  <dependencies> 
+  <dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+      <version>2.2.0.RELEASE</version>
+		</dependency>   
     <dependency> 
       <groupId>junit</groupId>  
       <artifactId>junit</artifactId>  

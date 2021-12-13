@@ -2,9 +2,17 @@ package com.example.model;
 
 import java.io.Serializable;
 import lombok.Data;
+import com.example.controller.*;
+import java.util.logging.*;
 
 @Data
 public class TodoItem implements Serializable {
+
+    Logger log = Logger.getLogger(TodoListController.class.getName());
+
+    static {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "[%4$-7s] %5$s %n");        
+    }    
 
 	private static final long serialVersionUID = 6437012982370705547L;
 	private Long id;

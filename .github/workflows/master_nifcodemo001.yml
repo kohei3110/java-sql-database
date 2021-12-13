@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'nifcodemo001'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3DF98BCCF6B34A58879C56D717234A93 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1F1C7470D9104DC1BA8743CFDB03FA73 }}
           package: '*.war'

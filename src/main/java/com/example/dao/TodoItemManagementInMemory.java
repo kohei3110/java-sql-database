@@ -51,6 +51,7 @@ public class TodoItemManagementInMemory implements ItemManagement{
     }
 
     public void test() throws Exception {
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         log.info("Loading application properties");
         Properties properties = new Properties();
         properties.load(TodoListController.class.getClassLoader().getResourceAsStream("application.properties"));

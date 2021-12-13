@@ -26,7 +26,8 @@ public class TodoListController implements Serializable {
 
 	@Inject
     TodoItemManagementInMemory todoManagement;
-
+    
+    @Setter @Getter
     private List<TodoItem> todoItems;
 
     @Setter @Getter

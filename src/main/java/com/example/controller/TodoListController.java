@@ -5,7 +5,6 @@ import com.example.model.*;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,11 +15,19 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
+import java.util.logging.Logger;
 
 @Named("todocontroller")
 @ViewScoped
 public class TodoListController implements Serializable {
+
+    Logger log = Logger.getLogger(TodoListController.class.getName());
+
+    static {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "[%4$-7s] %5$s %n");        
+    }    
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,7 +50,22 @@ public class TodoListController implements Serializable {
     private String category;
 
     @PostConstruct
-    public void init(){
+    public void init() throws Exception {
+        log.info("Loading application properties");
+        Properties properties = new Properties();
+        properties.load(TodoListController.class.getClassLoader().getResourceAsStream("application.properties"));
+
+        log.info("Connecting to the database");
+        Connection conn = DriverManager.getConnection(properties.getProperty("url"), properties);
+        log.info("Database connection test: " + conn.getCatalog());
+
+        log.info("Create database schema");
+        Scanner scanner = new Scanner(TodoListController.class.getClassLoader().getResourceAsStream("schema.sql"));
+        Statement stmt = conn.createStatement();
+        while (scanner.hasNextLine()) {
+            stmt.executeQuery(scanner.nextLine());
+        }
+
         TodoItem item1 = new TodoItem("App Services","Azure",false);
         TodoItem item2 = new TodoItem("Azure Kubernetes Service","Azure",false);
         TodoItem item3 = new TodoItem("JEP 359","Java",false);
@@ -60,7 +82,11 @@ public class TodoListController implements Serializable {
         todoItems.add(item5);
         todoItems.add(item6);
         todoItems.add(item7);
-    }    
+    }
+
+    public void buttonSQLAction() throws Exception{
+        todoManagement.test();
+    }
 
     public List<TodoItem> getTodoItems() {
         return todoManagement.getTodoItems();
@@ -117,5 +143,15 @@ public class TodoListController implements Serializable {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public void insertData (TodoItem todo, Connection conn) throws SQLException {
+        log.info("insert data");
+        PreparedStatement pstmt = conn.prepareStatement("INSERT INTO todo (id, category, name, complete) VALUES (?, ?, ?, ?);");
+
+        pstmt.setLong(1, todo.getId());
+        pstmt.setString(2, todo.getCategory());
+        pstmt.setString(3, todo.getName());
+        pstmt.executeUpdate();
     }
 }

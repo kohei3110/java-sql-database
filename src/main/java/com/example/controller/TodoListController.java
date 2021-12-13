@@ -51,21 +51,6 @@ public class TodoListController implements Serializable {
 
     @PostConstruct
     public void init() throws Exception {
-        log.info("Loading application properties");
-        Properties properties = new Properties();
-        properties.load(TodoListController.class.getClassLoader().getResourceAsStream("application.properties"));
-
-        log.info("Connecting to the database");
-        Connection conn = DriverManager.getConnection(properties.getProperty("url"), properties);
-        log.info("Database connection test: " + conn.getCatalog());
-
-        log.info("Create database schema");
-        Scanner scanner = new Scanner(TodoListController.class.getClassLoader().getResourceAsStream("schema.sql"));
-        Statement stmt = conn.createStatement();
-        while (scanner.hasNextLine()) {
-            stmt.executeQuery(scanner.nextLine());
-        }
-
         TodoItem item1 = new TodoItem("App Services","Azure",false);
         TodoItem item2 = new TodoItem("Azure Kubernetes Service","Azure",false);
         TodoItem item3 = new TodoItem("JEP 359","Java",false);
